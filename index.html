@@ -88,9 +88,28 @@ nav {
 .hero-visual { animation:fadeUp 0.6s 0.4s ease both; }
 .code-card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:1.5rem; font-family:'Courier New',monospace; font-size:0.8rem; line-height:1.8; position:relative; box-shadow:0 0 60px rgba(99,179,237,0.06); overflow:hidden; }
 .code-card::before { content:''; position:absolute; top:-1px; left:20px; right:20px; height:2px; background:linear-gradient(90deg,transparent,var(--accent),transparent); }
-.code-dots { display:flex; gap:6px; margin-bottom:1rem; }
-.code-dots span { width:10px; height:10px; border-radius:50%; }
-.dot-r{background:#ff5f57;} .dot-y{background:#febc2e;} .dot-g{background:#28c840;}
+.code-card-wrap { position: relative; }
+.floating-tags {
+  position: absolute;
+  right: -90px; top: 50%; transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 0.7rem;
+}
+.ftag {
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  font-size: 0.82rem; font-weight: 600;
+  display: flex; align-items: center; gap: 0.4rem;
+  white-space: nowrap;
+  animation: float 3s ease-in-out infinite;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+.ftag:nth-child(2) { animation-delay: 0.6s; }
+.ftag:nth-child(3) { animation-delay: 1.2s; }
+.ftag-yellow { background: #2a2000; border: 1px solid rgba(251,191,36,0.3); color: #fbbf24; }
+.ftag-orange { background: #2a0f00; border: 1px solid rgba(249,115,22,0.3); color: #f97316; }
+.ftag-green  { background: #002a10; border: 1px solid rgba(16,185,129,0.3); color: var(--accent3); }
+
+@keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
 .c-kw{color:#c792ea;} .c-fn{color:#82aaff;} .c-str{color:#c3e88d;} .c-var{color:#f78c6c;} .c-cm{color:#546e7a;} .c-num{color:#f78c6c;}
 
 /* SECTIONS */
@@ -175,25 +194,52 @@ footer { border-top:1px solid var(--border); padding:1.5rem; text-align:center; 
 ::-webkit-scrollbar-thumb { background:rgba(99,179,237,0.3); border-radius:2px; }
 
 /* RESPONSIVE */
+@media (max-width: 1200px) { .floating-tags { display:none; } }
 @media (max-width: 900px) {
   .hero-content { grid-template-columns:1fr; }
   .hero-visual { display:none; }
   .about-grid { grid-template-columns:1fr; }
+  .about-img-wrap { max-width:280px; margin:0 auto 2rem; }
 }
 @media (max-width: 640px) {
   nav { padding:1rem 1.2rem; }
   .nav-links { display:none; }
   .hamburger { display:flex; }
-  .hero { padding:5.5rem 1.2rem 3rem; }
-  section { padding:3.5rem 1.2rem; }
-  .hero-title { font-size:2.4rem; }
+
+  .hero { padding:5.5rem 1rem 3rem; overflow:hidden; }
+  section { padding:3.5rem 1rem; }
+
+  /* Fix title overflow on mobile */
+  .hero-title {
+    font-size: clamp(1.9rem, 9vw, 2.6rem) !important;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+  .hero-title .accent-word { display:block; }
+
+  .hero-desc { font-size:0.9rem; }
+
   .contact-card { padding:2rem 1rem; }
-  .about-corner.tl { top:-8px; left:-8px; font-size:0.68rem; padding:0.4rem 0.6rem; }
-  .about-corner.br { bottom:-8px; right:-8px; font-size:0.68rem; padding:0.4rem 0.6rem; }
+  .about-corner.tl { top:-8px; left:-8px; font-size:0.65rem; padding:0.35rem 0.55rem; }
+  .about-corner.br { bottom:-8px; right:-8px; font-size:0.65rem; padding:0.35rem 0.55rem; }
   .skills-grid { grid-template-columns:1fr; }
   .stats-row { gap:1.2rem; }
   .hero-cta { flex-direction:column; }
-  .btn-primary, .btn-outline { text-align:center; }
+  .btn-primary, .btn-outline { text-align:center; width:100%; }
+
+  /* About photo on mobile */
+  .about-img-box { max-width:240px; margin:0 auto; }
+  .initials { font-size:3rem; }
+
+  /* Projects single column */
+  .projects-grid { grid-template-columns:1fr; }
+
+  /* Skills single column on very small */
+  .skills-cats { grid-template-columns:1fr; }
+
+  /* Contact links stack */
+  .contact-links { flex-direction:column; align-items:stretch; }
+  .contact-link { justify-content:center; }
 }
 </style>
 </head>
@@ -244,30 +290,36 @@ footer { border-top:1px solid var(--border); padding:1.5rem; text-align:center; 
       </div>
     </div>
     <div class="hero-visual">
-      <div class="code-card">
-        <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
-        <span class="c-kw">const</span> <span class="c-var">developer</span> = {<br>
-        &nbsp;&nbsp;<span class="c-fn">name</span>: <span class="c-str">"Nisar Ali"</span>,<br>
-        &nbsp;&nbsp;<span class="c-fn">role</span>: <span class="c-str">"Full-Stack Dev"</span>,<br>
-        &nbsp;&nbsp;<span class="c-fn">uni</span>: <span class="c-str">"UET Mardan"</span>,<br>
-        &nbsp;&nbsp;<span class="c-fn">skills</span>: [<span class="c-str">"React"</span>, <span class="c-str">"Node"</span>, <span class="c-str">"Flutter"</span>],<br>
-        &nbsp;&nbsp;<span class="c-fn">available</span>: <span class="c-num">true</span><br>
-        };<br><br>
-        <span class="c-cm">// Ready to join your team ✓</span>
+      <div class="code-card-wrap">
+        <div class="code-card">
+          <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+          <span class="c-kw">const</span> <span class="c-var">developer</span> = {<br>
+          &nbsp;&nbsp;<span class="c-fn">name</span>: <span class="c-str">"Nisar Ali"</span>,<br>
+          &nbsp;&nbsp;<span class="c-fn">role</span>: <span class="c-str">"Full-Stack Dev"</span>,<br>
+          &nbsp;&nbsp;<span class="c-fn">university</span>: <span class="c-str">"UET Mardan"</span>,<br>
+          &nbsp;&nbsp;<span class="c-fn">skills</span>: [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="c-str">"React"</span>, <span class="c-str">"Node.js"</span>,<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="c-str">"Flutter"</span>, <span class="c-str">"WordPress"</span><br>
+          &nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;<span class="c-fn">available</span>: <span class="c-num">true</span><br>
+          };<br><br>
+          <span class="c-cm">// Open To Work With Real World Projects</span><br>
+          <span class="c-fn">developer</span>.<span class="c-var">hire</span>() <span class="c-cm">✓</span>
+        </div>
+        <div class="floating-tags">
+          <div class="ftag ftag-yellow">⚡ React.js</div>
+          <div class="ftag ftag-orange">🔥 Firebase</div>
+          <div class="ftag ftag-green">🌿 Node.js</div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ABOUT -->
-<!-- <section id="about" style="background:var(--bg2);">
+<section id="about" style="background:var(--bg2);">
   <div class="container">
-    <div class="section-tag reveal">About Me</div>
     <div class="about-grid">
-      <div class="about-img-wrap reveal">
-        <div class="about-img-box">
-          <!-- PHOTO: replace src with your photo URL -->
- 
       <div class="about-text reveal">
         <div class="section-tag">Who I Am</div>
         <h2 class="section-title" style="font-size:1.8rem;">Nisar Ali</h2>
@@ -373,7 +425,7 @@ footer { border-top:1px solid var(--border); padding:1.5rem; text-align:center; 
   </div>
 </section>
 
-<footer><p>Designed & Built by <span style="color:var(--accent)">Nisar Ali</span> — CS Student at UET Mardan</p></footer>
+<footer><p>Designed & Built by <span style="color:var(--accent)">Nisar Ali</span></p></footer>
 
 <script>
 // HAMBURGER MENU — close on link click & toggle
