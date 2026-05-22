@@ -1,1 +1,3 @@
-www → nisarali.github.io
+# Nisar Ali — Portfolio
+
+🌐 Live: [nisarali.me](https://nisarali.me)
